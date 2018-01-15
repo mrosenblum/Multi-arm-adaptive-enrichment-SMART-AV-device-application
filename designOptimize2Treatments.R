@@ -1,12 +1,3 @@
-job.number <- as.numeric(Sys.getenv("SGE_TASK_ID"))
-
-load("seed1000.rda")
-
-set.seed(a[job.number])
-
-library(mvtnorm)
-library(plyr)
-
 # Note to self: 2017-08-15 19:52:
 # We can use names(formals(transform.parameters)) to get the set of formal
 # arguments to a function: this might be a useful way of making sure all
@@ -1335,97 +1326,97 @@ sa.optimize <-
 #################.  A fixed two stage design 
 ########################################################################################################################################
 
-#  smart.av.trial.two.stage.fixed <-
-#    sa.optimize(search.parameters=                
-#                list(n.per.arm=650),
-#                search.transforms=
-#                  list(n.per.arm=function(x) ceiling(squash(x, 50, 1e4))),
-#                fixed.parameters=list(n.arms=3,
-#                                      interim.info.times = 0.5,
-#                                      subpopulation.sizes=c(0.49, 0.51),
-#                                      alpha.allocation=c(0.25, 0.25, 0.25, 0.25),
-#                                      accrual.rate=20 * 12,
-#                                      outcome.type="continuous",
-#                                      outcome.mean=ui.outcome.mean,
-#                                      outcome.sd=ui.outcome.sd,
-#                                      delay=0.5,
-#                                      mcid=0,
-#                                      futility.boundaries= c(0,0,0,0),
-#                                      total.alpha=0.05),
-#                create.object=dunnett.wrapper,
-#                evaluate.object=power.penalized.weighted.ess,
-#                function.scale=1,
-#                parameter.scale=c(10),
-#                max.iterations=500,
-#                temperature=10,
-#                evals.per.temp=10,
-#                report.iteration=1,
-#                power.penalty=10^6)
+  smart.av.trial.two.stage.fixed <-
+    sa.optimize(search.parameters=                
+                list(n.per.arm=650),
+                search.transforms=
+                  list(n.per.arm=function(x) ceiling(squash(x, 50, 1e4))),
+                fixed.parameters=list(n.arms=3,
+                                      interim.info.times = 0.5,
+                                      subpopulation.sizes=c(0.49, 0.51),
+                                      alpha.allocation=c(0.25, 0.25, 0.25, 0.25),
+                                      accrual.rate=20 * 12,
+                                      outcome.type="continuous",
+                                      outcome.mean=ui.outcome.mean,
+                                      outcome.sd=ui.outcome.sd,
+                                      delay=0.5,
+                                      mcid=0,
+                                      futility.boundaries= c(0,0,0,0),
+                                      total.alpha=0.05),
+                create.object=dunnett.wrapper,
+                evaluate.object=power.penalized.weighted.ess,
+                function.scale=1,
+                parameter.scale=c(10),
+                max.iterations=500,
+                temperature=10,
+                evals.per.temp=10,
+                report.iteration=1,
+                power.penalty=10^6)
 
 
 ########################################################################################################################################
 #################.  A one stage design with equal alpha allocation
 ########################################################################################################################################
 
-#  smart.av.trial.one.stage.equal.alpha <-
-#    sa.optimize(search.parameters=                
-#                list(n.per.arm=750),
-#                search.transforms=
-#                  list(n.per.arm=function(x) ceiling(squash(x, 50, 1e4))),
-#                fixed.parameters=list(n.arms=3,
-#                                      interim.info.times = NULL,
-#                                      subpopulation.sizes=c(0.49, 0.51),
-#                                      alpha.allocation=c(0.5, 0.5),
-#                                      accrual.rate=20 * 12,
-#                                      outcome.type="continuous",
-#                                      outcome.mean=ui.outcome.mean,
-#                                      outcome.sd=ui.outcome.sd,
-#                                      delay=0.5,
-#                                      mcid=0,
-#                                      futility.boundaries= NULL,
-#                                      total.alpha=0.05),
-#                create.object=dunnett.wrapper,
-#                evaluate.object=power.penalized.weighted.ess,
-#                function.scale=1,
-#                parameter.scale=c(10),
-#                max.iterations=500,
-#                temperature=10,
-#                evals.per.temp=10,
-#                report.iteration=1,
-#                power.penalty=10^6)
+  smart.av.trial.one.stage.equal.alpha <-
+    sa.optimize(search.parameters=                
+                list(n.per.arm=750),
+                search.transforms=
+                  list(n.per.arm=function(x) ceiling(squash(x, 50, 1e4))),
+                fixed.parameters=list(n.arms=3,
+                                      interim.info.times = NULL,
+                                      subpopulation.sizes=c(0.49, 0.51),
+                                      alpha.allocation=c(0.5, 0.5),
+                                      accrual.rate=20 * 12,
+                                      outcome.type="continuous",
+                                      outcome.mean=ui.outcome.mean,
+                                      outcome.sd=ui.outcome.sd,
+                                      delay=0.5,
+                                      mcid=0,
+                                      futility.boundaries= NULL,
+                                      total.alpha=0.05),
+                create.object=dunnett.wrapper,
+                evaluate.object=power.penalized.weighted.ess,
+                function.scale=1,
+                parameter.scale=c(10),
+                max.iterations=500,
+                temperature=10,
+                evals.per.temp=10,
+                report.iteration=1,
+                power.penalty=10^6)
 
 ########################################################################################################################################
 #################.  A one stage design with optimized alpha allocation
 ########################################################################################################################################
 
 
-#  smart.av.trial.one.stage.optimized.alpha <-
-#    sa.optimize(search.parameters=                
-#                list(n.per.arm=630,
-#                       alpha.allocation=c(0, 0)),
-#                search.transforms=
-#                  list(n.per.arm=function(x) ceiling(squash(x, 50, 1e4)),                                               
-#                       alpha.allocation=reals.to.probability),
-#                fixed.parameters=list(n.arms=3,
-#                                      interim.info.times = NULL,
-#                                      futility.boundaries = NULL,
-#                                      subpopulation.sizes=c(0.49, 0.51),
-#                                      accrual.rate=20 * 12,
-#                                      outcome.type="continuous",
-#                                      outcome.mean=ui.outcome.mean,
-#                                      outcome.sd=ui.outcome.sd,
-#                                      delay=0.5,
-#                                      mcid=0,
-#                                      total.alpha=0.05),
-#                create.object=dunnett.wrapper,
-#                evaluate.object=power.penalized.weighted.ess,
-#                function.scale=1,
-#                parameter.scale=c(10, rep(1, 2)),
-#                max.iterations=500,
-#                temperature=10,
-#                evals.per.temp=10,
-#                report.iteration=1,
-#                power.penalty=10^6)
+  smart.av.trial.one.stage.optimized.alpha <-
+    sa.optimize(search.parameters=                
+                list(n.per.arm=630,
+                       alpha.allocation=c(0, 0)),
+                search.transforms=
+                  list(n.per.arm=function(x) ceiling(squash(x, 50, 1e4)),                                               
+                       alpha.allocation=reals.to.probability),
+                fixed.parameters=list(n.arms=3,
+                                      interim.info.times = NULL,
+                                      futility.boundaries = NULL,
+                                     subpopulation.sizes=c(0.49, 0.51),
+                                      accrual.rate=20 * 12,
+                                      outcome.type="continuous",
+                                      outcome.mean=ui.outcome.mean,
+                                      outcome.sd=ui.outcome.sd,
+                                      delay=0.5,
+                                      mcid=0,
+                                      total.alpha=0.05),
+                create.object=dunnett.wrapper,
+                evaluate.object=power.penalized.weighted.ess,
+                function.scale=1,
+                parameter.scale=c(10, rep(1, 2)),
+                max.iterations=500,
+                temperature=10,
+                evals.per.temp=10,
+                report.iteration=1,
+                power.penalty=10^6)
 
 
 
@@ -1433,136 +1424,135 @@ sa.optimize <-
 #################.  A two stage design that optimizes alpha.allocation, interim analysis timing and futility boundaries
 ########################################################################################################################################
 
-#  smart.av.trial.optimized.adaptive <-
-#    sa.optimize(search.parameters=                
-#                list(n.per.arm=650,
-#                       interim.info.times=0,
-#                       alpha.allocation=c(0, 0, 0, 0),
-#                       futility.boundaries=c(-1, -1, -1, -1)),
-#                search.transforms=
-#                  list(n.per.arm=function(x) ceiling(squash(x, 50, 1e4)),
-#                       interim.info.times=function(x)
-#                         squash(plogis(x),0.1, 0.9),
-#                       alpha.allocation=reals.to.probability),
-#                fixed.parameters=list(n.arms=3,
-#                                      subpopulation.sizes=c(0.49, 0.51),
-#                                      accrual.rate=20 * 12,
-#                                      outcome.type="continuous",
-#                                      outcome.mean=ui.outcome.mean,
-#                                      outcome.sd=ui.outcome.sd,
-#                                      delay=0.5,
-#                                      mcid=0,
-#                                      total.alpha=0.05),
-#                create.object=dunnett.wrapper,
-#                evaluate.object=power.penalized.weighted.ess,
-#                function.scale=1,
-#                parameter.scale=c(10, 1, rep(1, 4), rep(1, 4)),
-#                max.iterations=500,
-#                temperature=10,
-#                evals.per.temp=10,
-#                report.iteration=1,
-#                power.penalty=10^6)
+  smart.av.trial.optimized.adaptive <-
+    sa.optimize(search.parameters=                
+                list(n.per.arm=650,
+                       interim.info.times=0,
+                       alpha.allocation=c(0, 0, 0, 0),
+                       futility.boundaries=c(-1, -1, -1, -1)),
+                search.transforms=
+                  list(n.per.arm=function(x) ceiling(squash(x, 50, 1e4)),
+                       interim.info.times=function(x)
+                         squash(plogis(x),0.1, 0.9),
+                       alpha.allocation=reals.to.probability),
+                fixed.parameters=list(n.arms=3,
+                                      subpopulation.sizes=c(0.49, 0.51),
+                                      accrual.rate=20 * 12,
+                                      outcome.type="continuous",
+                                      outcome.mean=ui.outcome.mean,
+                                      outcome.sd=ui.outcome.sd,
+                                      delay=0.5,
+                                      mcid=0,
+                                      total.alpha=0.05),
+                create.object=dunnett.wrapper,
+                evaluate.object=power.penalized.weighted.ess,
+                function.scale=1,
+                parameter.scale=c(10, 1, rep(1, 4), rep(1, 4)),
+                max.iterations=500,
+                temperature=10,
+                evals.per.temp=10,
+                report.iteration=1,
+                power.penalty=10^6)
 
 
 ########################################################################################################################################
 #################.  A three stage design that optimizes alpha.allocation, interim analysis timing and futility boundaries
 ########################################################################################################################################
 
-#  smart.av.trial.optimized.three.stage.adaptive <-
-#        sa.optimize(search.parameters=
-#                                    list(n.per.arm=650,
-#                                                                interim.info.times=c(0.3, 0.5),
-#                                                                alpha.allocation=c(0, 0, 0, 0, 0, 0),
-#                                                                futility.boundaries=c(-1, -1, -1, -1, -1, -1, -1, -1)),
-#                                    search.transforms=
-#                                      list(n.per.arm=function(x) ceiling(squash(x, 50, 1e4)),
-#                                                                  interim.info.times=function(x)
-#                                                                    squash(sort(plogis(x)),0.1, 0.9),
-#                                                                  alpha.allocation=reals.to.probability),
-#                                    fixed.parameters=list(n.arms=3,
-#                                                                              subpopulation.sizes=c(0.49, 0.51),
-#                                                                              accrual.rate=20 * 12,
-#                                                                              outcome.type="continuous",
-#                                                                              outcome.mean=ui.outcome.mean,
-#                                                                              outcome.sd=ui.outcome.sd,
-#                                                                              delay=0.5,
-#                                                                              mcid=0,
-#                                                                              total.alpha=0.05),
-#                                    create.object=dunnett.wrapper,
-#                                    evaluate.object=power.penalized.weighted.ess,
-#                                    function.scale=1,
-#                                    parameter.scale=c(10, rep(1,2), rep(1, 6), rep(1, 8)),
-#                                    max.iterations=500,
-#                                    temperature=10,
-#                                    evals.per.temp=10,
-#                                    report.iteration=1,
-#                                    power.penalty=10^6)
+  smart.av.trial.optimized.three.stage.adaptive <-
+        sa.optimize(search.parameters=
+                                    list(n.per.arm=650,
+                                                                interim.info.times=c(0.3, 0.5),
+                                                                alpha.allocation=c(0, 0, 0, 0, 0, 0),
+                                                                futility.boundaries=c(-1, -1, -1, -1, -1, -1, -1, -1)),
+                                    search.transforms=
+                                      list(n.per.arm=function(x) ceiling(squash(x, 50, 1e4)),
+                                                                  interim.info.times=function(x)
+                                                                    squash(sort(plogis(x)),0.1, 0.9),
+                                                                  alpha.allocation=reals.to.probability),
+                                    fixed.parameters=list(n.arms=3,
+                                                                              subpopulation.sizes=c(0.49, 0.51),
+                                                                              accrual.rate=20 * 12,
+                                                                              outcome.type="continuous",
+                                                                              outcome.mean=ui.outcome.mean,
+                                                                              outcome.sd=ui.outcome.sd,
+                                                                              delay=0.5,
+                                                                              mcid=0,
+                                                                              total.alpha=0.05),
+                                    create.object=dunnett.wrapper,
+                                    evaluate.object=power.penalized.weighted.ess,
+                                    function.scale=1,
+                                    parameter.scale=c(10, rep(1,2), rep(1, 6), rep(1, 8)),
+                                    max.iterations=500,
+                                    temperature=10,
+                                    evals.per.temp=10,
+                                    report.iteration=1,
+                                    power.penalty=10^6)
 
 ########################################################################################################################################
 #################.  A fixed three stage design with interim analysis at times 1/3 and 2/3
 ########################################################################################################################################
 
-#  smart.av.trial.three.stage.fixed <-
-#        sa.optimize(search.parameters=
-#                                    list(n.per.arm=650),
-#                                    search.transforms=
-#                                      list(n.per.arm=function(x) ceiling(squash(x, 50, 1e4))),
-#                                    fixed.parameters=list(n.arms=3,
-#                                                                              interim.info.times = c(1/3, 2/3),
-#                                                                              subpopulation.sizes=c(0.49, 0.51),
-#                                                                              alpha.allocation=rep(1/6, 6),
-#                                                                              accrual.rate=20 * 12,
-#                                                                              outcome.type="continuous",
-#                                                                              outcome.mean=ui.outcome.mean,
-#                                                                              outcome.sd=ui.outcome.sd,
-#                                                                              delay=0.5,
-#                                                                              mcid=0,
-#                                                                              futility.boundaries= c(0,0,0,0,0,0,0,0),
-#                                                                              total.alpha=0.05),
-#                                    create.object=dunnett.wrapper,
-#                                    evaluate.object=power.penalized.weighted.ess,
-#                                    function.scale=1,
-#                                    parameter.scale=c(10),
-#                                    max.iterations=500,
-#                                    temperature=10,
-#                                    evals.per.temp=10,
-#                                    report.iteration=1,
-#                                    power.penalty=10^6)
+  smart.av.trial.three.stage.fixed <-
+        sa.optimize(search.parameters=
+                                    list(n.per.arm=650),
+                                    search.transforms=
+                                      list(n.per.arm=function(x) ceiling(squash(x, 50, 1e4))),
+                                    fixed.parameters=list(n.arms=3,
+                                                                              interim.info.times = c(1/3, 2/3),
+                                                                              subpopulation.sizes=c(0.49, 0.51),
+                                                                              alpha.allocation=rep(1/6, 6),
+                                                                              accrual.rate=20 * 12,
+                                                                              outcome.type="continuous",
+                                                                              outcome.mean=ui.outcome.mean,
+                                                                              outcome.sd=ui.outcome.sd,
+                                                                              delay=0.5,
+                                                                              mcid=0,
+                                                                              futility.boundaries= c(0,0,0,0,0,0,0,0),
+                                                                              total.alpha=0.05),
+                                    create.object=dunnett.wrapper,
+                                    evaluate.object=power.penalized.weighted.ess,
+                                    function.scale=1,
+                                    parameter.scale=c(10),
+                                    max.iterations=500,
+                                    temperature=10,
+                                    evals.per.temp=10,
+                                    report.iteration=1,
+                                    power.penalty=10^6)
 
-#
 ########################################################################################################################################
 #################.  An optimized four stage design
 ######################################################################################################################################## 
 
-#  smart.av.trial.optimized.four.stage.adaptive <-
-#        sa.optimize(search.parameters=
-#                                    list(n.per.arm=650,
-#                                                                interim.info.times=c(0, 1/3,2/3),
-#                                                                alpha.allocation=c(0, 0, 0, 0, 0, 0, 0, 0),
-#                                                                futility.boundaries=c(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1)),
-#                                    search.transforms=
-#                                      list(n.per.arm=function(x) ceiling(squash(x, 50, 1e4)),
-#                                                                  interim.info.times=function(x)
-#                                                                    squash(sort(plogis(x)),0.1, 0.9),
-#                                                                  alpha.allocation=reals.to.probability),
-#                                    fixed.parameters=list(n.arms=3,
-#                                                                              subpopulation.sizes=c(0.49, 0.51),
-#                                                                              accrual.rate=20 * 12,
-#                                                                              outcome.type="continuous",
-#                                                                              outcome.mean=ui.outcome.mean,
-#                                                                              outcome.sd=ui.outcome.sd,
-#                                                                              delay=0.5,
-#                                                                              mcid=0,
-#                                                                              total.alpha=0.05),
-#                                    create.object=dunnett.wrapper,
-#                                    evaluate.object=power.penalized.weighted.ess,
-#                                    function.scale=1,
-#                                    parameter.scale=c(10, rep(1,3), rep(1, 8), rep(1, 12)),
-#                                    max.iterations=500,
-#                                    temperature=10,
-#                                    evals.per.temp=10,
-#                                    report.iteration=1,
-#                                    power.penalty=10^6)
+  smart.av.trial.optimized.four.stage.adaptive <-
+        sa.optimize(search.parameters=
+                                    list(n.per.arm=650,
+                                                                interim.info.times=c(0, 1/3,2/3),
+                                                                alpha.allocation=c(0, 0, 0, 0, 0, 0, 0, 0),
+                                                                futility.boundaries=c(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1)),
+                                    search.transforms=
+                                      list(n.per.arm=function(x) ceiling(squash(x, 50, 1e4)),
+                                                                  interim.info.times=function(x)
+                                                                    squash(sort(plogis(x)),0.1, 0.9),
+                                                                  alpha.allocation=reals.to.probability),
+                                    fixed.parameters=list(n.arms=3,
+                                                                              subpopulation.sizes=c(0.49, 0.51),
+                                                                              accrual.rate=20 * 12,
+                                                                              outcome.type="continuous",
+                                                                              outcome.mean=ui.outcome.mean,
+                                                                              outcome.sd=ui.outcome.sd,
+                                                                              delay=0.5,
+                                                                              mcid=0,
+                                                                              total.alpha=0.05),
+                                    create.object=dunnett.wrapper,
+                                    evaluate.object=power.penalized.weighted.ess,
+                                    function.scale=1,
+                                    parameter.scale=c(10, rep(1,3), rep(1, 8), rep(1, 12)),
+                                    max.iterations=500,
+                                    temperature=10,
+                                    evals.per.temp=10,
+                                    report.iteration=1,
+                                    power.penalty=10^6)
 
 ########################################################################################################################################
 #################.  A fixed four stage design with interim analysis at times 1/4 and 2/4, 3/4
@@ -1594,26 +1584,3 @@ sa.optimize <-
                                     evals.per.temp=10,
                                     report.iteration=1,
                                     power.penalty=10^6)
-
-  ### sa.temperature #############################################################
-  # Description: this is a function for viewing the default cooling schedule for
-  #   optim()'s implementation of simulated annealing. The behavior of simulated
-  #   annealing can strongly depend on the initial temperature.
-  sa.temperature <- 
-    function(iteration=1,
-             max.iterations=10000,
-             temperature=10,
-             evals.per.temp=10) {
-    temperature / log(((iteration-1) %/% evals.per.temp)*evals.per.temp + exp(1))
-  }
-  ### sa.temp example ############################################################
-  # sa.temperature(iteration=20, max.iterations=1e4,
-  #                temperature=10, evals.per.temp=10)
-  # plot(sa.temperature(iteration=seq(1, 1e4), max.iterations=1e4,
-  #                     temperature=10, evals.per.temp=500)~seq(1, 1e4), type='l',
-  #      ylab="SA Temperature", xlab="Iteration")
-
-#result = list(smart.av.trial.two.stage.fixed = smart.av.trial.two.stage.fixed, smart.av.trial.one.stage.equal.alpha = smart.av.trial.one.stage.equal.alpha, smart.av.trial.one.stage.optimized.alpha = smart.av.trial.one.stage.optimized.alpha, smart.av.trial.optimized.adaptive = smart.av.trial.optimized.adaptive)
-
-file.name = paste("Result/Temp/fileUsed4StageFixed", toString(job.number), ".rda", sep = "")
-save(smart.av.trial.four.stage.fixed, file = file.name)
